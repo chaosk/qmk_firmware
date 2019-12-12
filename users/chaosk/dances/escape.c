@@ -1,3 +1,9 @@
+/* Escape key.
+ *
+ * Single tap: Escape key
+ * Single hold: Scoreboard
+ * Double tap: Pause
+ */
 
 static tap escape_state = {
     .is_press_action = true,

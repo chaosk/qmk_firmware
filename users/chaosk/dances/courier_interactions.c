@@ -1,9 +1,13 @@
+/* Courier interactions key.
+ *
+ * Single tap: Select Courier
+ * Single hold: Deliver Items
+ */
 
 static tap courier_interactions_state = {
     .is_press_action = true,
     .state           = 0
 };
-
 
 void courier_interactions_finished(qk_tap_dance_state_t *state, void *user_data) {
     courier_interactions_state.state = current_dance(state);
