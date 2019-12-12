@@ -1,5 +1,8 @@
 #include QMK_KEYBOARD_H
 #include "version.h"
+#include "tap_dance.h"
+#include "dances/escape.c"
+#include "dances/courier_interactions.c"
 
 #define BASE 0 // default layer
 #define SYMB 1 // symbols
@@ -13,6 +16,11 @@ enum custom_keycodes {
 #endif
     VRSN,
     RGB_SLD
+};
+
+enum {
+    TD_ESCAPE_SCOREBOARD_PAUSE = 0,
+    TD_COURIER_INTERACTIONS
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -39,7 +47,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [BASE] = LAYOUT_ergodox(
     // left hand
-    KC_ESC,          KC_1,        KC_2,          KC_3,    KC_4,    KC_5,    KC_LEFT,
+    TD(TD_ESCAPE_SCOREBOARD_PAUSE),          KC_1,        KC_2,          TD(TD_COURIER_INTERACTIONS),    KC_4,    KC_5,    KC_LEFT,
     KC_DEL,          KC_Q,        KC_W,          KC_E,    KC_R,    KC_T,    TG(SYMB),
     KC_BSPC,         KC_A,        KC_S,          KC_D,    KC_F,    KC_G,
     KC_LSFT,         CTL_T(KC_Z), KC_X,          KC_C,    KC_V,    KC_B,    ALL_T(KC_NO),
@@ -240,4 +248,9 @@ layer_state_t layer_state_set_user(layer_state_t state) {
         }
 
     return state;
+};
+
+qk_tap_dance_action_t tap_dance_actions[] = {
+    [TD_ESCAPE_SCOREBOARD_PAUSE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, escape_finished, escape_reset),
+    [TD_COURIER_INTERACTIONS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, courier_interactions_finished, courier_interactions_reset),
 };
