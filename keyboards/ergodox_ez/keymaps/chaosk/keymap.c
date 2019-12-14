@@ -3,6 +3,7 @@
 #include "custom_keycodes.h"
 #include "tap_dance.h"
 #include "dances/escape.c"
+#include "dances/modals.c"
 #include "dances/courier_interactions.c"
 
 #define BASE 0 // default layer
@@ -11,6 +12,7 @@
 
 enum {
     TD_ESCAPE_SCOREBOARD_PAUSE = 0,
+    TD_DOTAPLUS_DEATHSUMMARY_CONSOLE,
     TD_COURIER_INTERACTIONS
 };
 
@@ -18,7 +20,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* Keymap 0: Basic layer
  *
  * ,--------------------------------------------------.           ,--------------------------------------------------.
- * | TD_SCOR|   1  |   2  |TDCOUR|   4  |   5  | LEFT |           | RIGHT|   6  |   7  |   8  |   9  |   0  |   -    |
+ * | TD_SCOR|   1  |   2  |TDCOUR|   4  |   5  |TDMODL|           | RIGHT|   6  |   7  |   8  |   9  |   0  |   -    |
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
  * | Del    |   Q  |   W  |   E  |   R  |   T  |  L1  |           |  L1  |   Y  |   U  |   I  |   O  |   P  |   \    |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
@@ -38,7 +40,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [BASE] = LAYOUT_ergodox(
     // left hand
-    TD(TD_ESCAPE_SCOREBOARD_PAUSE),          KC_1,        KC_2,          TD(TD_COURIER_INTERACTIONS),    KC_4,    KC_5,    KC_LEFT,
+    TD(TD_ESCAPE_SCOREBOARD_PAUSE),          KC_1,        KC_2,          TD(TD_COURIER_INTERACTIONS),    KC_4,    KC_5,    TD(TD_DOTAPLUS_DEATHSUMMARY_CONSOLE),
     KC_DEL,          KC_Q,        KC_W,          KC_E,    KC_R,    KC_T,    TG(SYMB),
     KC_BSPC,         KC_A,        KC_S,          KC_D,    KC_F,    KC_G,
     KC_LSFT,         CTL_T(KC_Z), KC_X,          KC_C,    KC_V,    KC_B,    ALL_T(KC_NO),
@@ -235,5 +237,6 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
 qk_tap_dance_action_t tap_dance_actions[] = {
     [TD_ESCAPE_SCOREBOARD_PAUSE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, escape_finished, escape_reset),
+    [TD_DOTAPLUS_DEATHSUMMARY_CONSOLE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, modals_finished, modals_reset),
     [TD_COURIER_INTERACTIONS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, courier_interactions_finished, courier_interactions_reset),
 };
