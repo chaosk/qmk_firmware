@@ -1,5 +1,6 @@
 #include QMK_KEYBOARD_H
 #include "version.h"
+#include "custom_keycodes.h"
 #include "tap_dance.h"
 #include "dances/escape.c"
 #include "dances/courier_interactions.c"
@@ -7,16 +8,6 @@
 #define BASE 0 // default layer
 #define SYMB 1 // symbols
 #define MDIA 2 // media keys
-
-enum custom_keycodes {
-#ifdef ORYX_CONFIGURATOR
-    EPRM = EZ_SAFE_RANGE,
-#else
-    EPRM = SAFE_RANGE,
-#endif
-    VRSN,
-    RGB_SLD
-};
 
 enum {
     TD_ESCAPE_SCOREBOARD_PAUSE = 0,
