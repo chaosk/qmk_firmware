@@ -1,53 +1,79 @@
 #include QMK_KEYBOARD_H
 #include "version.h"
 #include "custom_keycodes.h"
+#include "tap_hold_expire.h"
 #include "tap_dance.h"
 #include "dances/escape.c"
 #include "dances/modals.c"
-#include "dances/courier_interactions.c"
 
 #define BASE 0 // default layer
 #define SYMB 1 // symbols
 #define MDIA 2 // media keys
 
 enum {
+    ACTIVATE_GLYPH = KC_J,
+    ACTIVATE_SCAN = KC_P,
+    LEARN_ABILITY = KC_O,
+    UPGRADE_TALENTS = KC_U,
+    SELECT_COURIER = KC_F2,
+    DELIVER_ITEMS = KC_F3,
+    OPEN_SHOP = KC_F4,
+    PURCHASE_QUICKBUY = KC_F5,
+    PURCHASE_STICKY = KC_F6,
+    PUSH_TO_TALK = KC_F13,
+    TAKE_STASH_ITEMS = KC_F14,
+    PHRASE_WELL_PLAYED = KC_F15,
+    COURIER_BURST = KC_F16,
+    COURIER_SHIELD = KC_F17,
+    TOWN_PORTAL_SCROLL = KC_F18,
+    ITEM_2 = KC_F19,
+};
+
+enum {
+    TH_COURIER_ITEMS,
+    TH_SHOP,
+    TH_PURCHASE,
+    TH_COURIER_ABILITIES,
+    TH_LEVEL_UP,
+};
+
+enum {
     TD_ESCAPE_SCOREBOARD_PAUSE = 0,
     TD_DOTAPLUS_DEATHSUMMARY_CONSOLE,
-    TD_COURIER_INTERACTIONS
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* Keymap 0: Basic layer
  *
  * ,--------------------------------------------------.           ,--------------------------------------------------.
- * | TD_SCOR|   1  |   2  |TDCOUR|   4  |   5  |TDMODL|           | RIGHT|   6  |   7  |   8  |   9  |   0  |   -    |
+ * | TD_SCOR|   1  |   2  |THCOUR|THSHOP|THPURC|TDMODL|           | RIGHT|   6  |   7  |   8  |   9  |   0  |   -    |
  * |--------+------+------+------+------+-------------|           |------+------+------+------+------+------+--------|
- * | Del    |   Q  |   W  |   E  |   R  |   T  |  L1  |           |  L1  |   Y  |   U  |   I  |   O  |   P  |   \    |
+ * | Tab    |   Q  |   W  |   E  |   R  |   T  |  L1  |           |  L1  |   Y  |   U  |   I  |   O  |   P  |   \    |
  * |--------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * | BkSp   |   A  |   S  |   D  |   F  |   G  |------|           |------|   H  |   J  |   K  |   L  |; / L2|' / Cmd |
- * |--------+------+------+------+------+------| Hyper|           | Meh  |------+------+------+------+------+--------|
- * | LShift |Z/Ctrl|   X  |   C  |   V  |   B  |      |           |      |   N  |   M  |   ,  |   .  |//Ctrl| RShift |
+ * | PTT    |   A  |   S  |   D  |   F  |   G  |------|           |------|   H  |   J  |   K  |   L  |; / L2|' / Cmd |
+ * |--------+------+------+------+------+------|THCOUR|           | Meh  |------+------+------+------+------+--------|
+ * | LShift |   Z  |   X  |   C  |   V  |   B  |DEFENC|           |      |   N  |   M  |   ,  |   .  |//Ctrl| RShift |
  * `--------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- *   |Grv/L1|  '"  |AltShf| Left | Right|                                       |  Up  | Down |   [  |   ]  | ~L1  |
+ *   |Ctrl  |  '"  |Alt   |TPSCRL|ITEM_2|                                       |  Up  | Down |   [  |   ]  | ~L1  |
  *   `----------------------------------'                                       `----------------------------------'
  *                                        ,-------------.       ,-------------.
- *                                        | App  | reset|       | Alt  |Ctrl/Esc|
+ *                                        |WP!   |THLVLU|       | Alt  |Ctrl/Esc|
  *                                 ,------|------|------|       |------+--------+------.
- *                                 |      |      | Home |       | PgUp |        |      |
+ *                                 |      |      |GLYPH |       | PgUp |        |      |
  *                                 | Space|Backsp|------|       |------|  Tab   |Enter |
- *                                 |      |ace   | End  |       | PgDn |        |      |
+ *                                 |      |ace   |SCAN  |       | PgDn |        |      |
  *                                 `--------------------'       `----------------------'
  */
 [BASE] = LAYOUT_ergodox(
     // left hand
-    TD(TD_ESCAPE_SCOREBOARD_PAUSE),          KC_1,        KC_2,          TD(TD_COURIER_INTERACTIONS),    KC_4,    KC_5,    TD(TD_DOTAPLUS_DEATHSUMMARY_CONSOLE),
-    KC_DEL,          KC_Q,        KC_W,          KC_E,    KC_R,    KC_T,    TG(SYMB),
-    KC_BSPC,         KC_A,        KC_S,          KC_D,    KC_F,    KC_G,
-    KC_LSFT,         CTL_T(KC_Z), KC_X,          KC_C,    KC_V,    KC_B,    ALL_T(KC_NO),
-    LT(SYMB,KC_GRV), KC_QUOT,     LALT(KC_LSFT), KC_LEFT, KC_RGHT,
-                                                                                                                     ALT_T(KC_APP), RESET,
-                                                                                                                                                    KC_HOME,
-                                                                                                                 KC_SPC, KC_BSPC, KC_END,
+    TD(TD_ESCAPE_SCOREBOARD_PAUSE),          KC_1,        KC_2,          TH(TH_COURIER_ITEMS),    TH(TH_SHOP),    TH(TH_PURCHASE),    TD(TD_DOTAPLUS_DEATHSUMMARY_CONSOLE),
+    KC_TAB,          KC_Q,        KC_W,          KC_E,    KC_R,    KC_T,    OSL(SYMB),
+    PUSH_TO_TALK,         KC_A,        KC_S,          KC_D,    KC_F,    KC_G,
+    KC_LSFT,         KC_Z, KC_X,          KC_C,    KC_V,    KC_B,    TH(TH_COURIER_ABILITIES),
+    KC_LCTRL, KC_QUOT,     KC_LALT, TOWN_PORTAL_SCROLL, ITEM_2,
+                                                                                                                     PHRASE_WELL_PLAYED, TH(TH_LEVEL_UP),
+                                                                                                                                                    ACTIVATE_SCAN,
+                                                                                                                 KC_SPC, KC_BSPC, ACTIVATE_GLYPH,
     // right hand
     KC_RGHT,      KC_6,    KC_7,    KC_8,    KC_9,              KC_0,           KC_MINS,
     TG(SYMB),     KC_Y,    KC_U,    KC_I,    KC_O,              KC_P,           KC_BSLS,
@@ -143,6 +169,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (!(process_tap_hold_expire(keycode, record))) {
+        return false;
+    }
     if (record->event.pressed) {
         switch (keycode) {
             case VRSN:
@@ -162,6 +191,10 @@ void matrix_init_user(void) {
     rgblight_setrgb(RGBLIGHT_COLOR_LAYER_0);
 #endif
 };
+
+void matrix_scan_user(void) {
+    matrix_scan_tap_hold_expire();
+}
 
 // Runs whenever there is a layer state change.
 layer_state_t layer_state_set_user(layer_state_t state) {
@@ -238,5 +271,12 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 qk_tap_dance_action_t tap_dance_actions[] = {
     [TD_ESCAPE_SCOREBOARD_PAUSE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, escape_finished, escape_reset),
     [TD_DOTAPLUS_DEATHSUMMARY_CONSOLE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, modals_finished, modals_reset),
-    [TD_COURIER_INTERACTIONS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, courier_interactions_finished, courier_interactions_reset),
+};
+
+tap_hold_expire_action_t tap_hold_expire_actions[] = {
+    [TH_COURIER_ITEMS] = ACTION_TAP_HOLD_EXPIRE(SELECT_COURIER, DELIVER_ITEMS),
+    [TH_SHOP] = ACTION_TAP_HOLD_EXPIRE(OPEN_SHOP, TAKE_STASH_ITEMS),
+    [TH_PURCHASE] = ACTION_TAP_HOLD_EXPIRE(PURCHASE_QUICKBUY, PURCHASE_STICKY),
+    [TH_COURIER_ABILITIES] = ACTION_TAP_HOLD_EXPIRE(COURIER_SHIELD, COURIER_BURST),
+    [TH_LEVEL_UP] = ACTION_TAP_HOLD_EXPIRE(LEARN_ABILITY, UPGRADE_TALENTS),
 };
