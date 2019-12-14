@@ -83,7 +83,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TRNS, KC_EXLM, KC_AT,   KC_LCBR, KC_RCBR, KC_PIPE, KC_TRNS,
     KC_TRNS, KC_HASH, KC_DLR,  KC_LPRN, KC_RPRN, KC_GRV,
     KC_TRNS, KC_PERC, KC_CIRC, KC_LBRC, KC_RBRC, KC_TILD, KC_TRNS,
-    EPRM,    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+    KC_TRNS,    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
                                                                                              RGB_MOD, KC_TRNS,
                                                                                                                 KC_TRNS,
                                                                             RGB_VAD, RGB_VAI, KC_TRNS,
@@ -93,9 +93,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_DOWN, KC_4,    KC_5,    KC_6,    KC_PLUS, KC_TRNS,
     KC_TRNS, KC_AMPR, KC_1,    KC_2,    KC_3,    KC_BSLS, KC_TRNS,
     KC_TRNS, KC_DOT,  KC_0,    KC_EQL,  KC_TRNS,
-    RGB_TOG, RGB_SLD,
+    KC_TRNS, KC_TRNS,
     KC_TRNS,
-    KC_TRNS, RGB_HUD, RGB_HUI
+    KC_TRNS, KC_TRNS, KC_TRNS
 ),
 /* Keymap 2: Media and mouse keys
  *
@@ -143,17 +143,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
         switch (keycode) {
-            case EPRM:
-                eeconfig_init();
-                return false;
             case VRSN:
                 SEND_STRING (QMK_KEYBOARD "/" QMK_KEYMAP " @ " QMK_VERSION);
                 return false;
-            #ifdef RGBLIGHT_ENABLE
-            case RGB_SLD:
-                rgblight_mode(1);
-                return false;
-            #endif
         }
     }
     return true;
