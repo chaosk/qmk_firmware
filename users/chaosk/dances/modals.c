@@ -7,14 +7,11 @@
 
 enum {
     DEATH_SUMMARY = KC_EQUAL,
-    OPEN_CONSOLE = KC_BSLASH,
+    OPEN_CONSOLE  = KC_BSLASH,
     OPEN_DOTAPLUS = KC_F9,
 };
 
-static tap modals_state = {
-    .is_press_action = true,
-    .state           = 0
-};
+static tap modals_state = {.is_press_action = true, .state = 0};
 
 void modals_finished(qk_tap_dance_state_t *state, void *user_data) {
     modals_state.state = current_dance(state);

@@ -7,30 +7,30 @@
 #include "tap_hold_expire.h"
 #include "custom_keycodes.h"
 
-bool tap_hold_active = false;
+bool     tap_hold_active = false;
 uint16_t tap_hold_hold_code;
 uint16_t tap_hold_timer = 0;
 
 void process_tap_hold_expire_action(uint16_t tap_keycode, uint16_t hold_keycode, bool pressed) {
-    if(pressed) {
+    if (pressed) {
         tap_hold_timer = timer_read();
         if (tap_hold_hold_code != hold_keycode) {
             tap_hold_hold_code = hold_keycode;
-            tap_hold_active = true;
+            tap_hold_active    = true;
         }
     } else {
-        if (timer_elapsed(tap_hold_timer) < TAPPING_TERM){
+        if (timer_elapsed(tap_hold_timer) < TAPPING_TERM) {
             tap_code16(tap_keycode);
         } else if (tap_hold_active) {
             tap_code16(hold_keycode);
         }
         tap_hold_hold_code = 0;
-        tap_hold_active = false;
+        tap_hold_active    = false;
     }
 };
 
 bool process_tap_hold_expire(uint16_t keycode, keyrecord_t *record) {
-    uint16_t idx = keycode - QK_TAP_HOLD_EXPIRE;
+    uint16_t                  idx = keycode - QK_TAP_HOLD_EXPIRE;
     tap_hold_expire_action_t *action;
 
     switch (keycode) {

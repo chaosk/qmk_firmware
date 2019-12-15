@@ -6,15 +6,12 @@
  */
 
 enum {
-    ESCAPE = KC_ESC,
+    ESCAPE     = KC_ESC,
     SCOREBOARD = KC_GRAVE,
-    PAUSE = KC_F7,
+    PAUSE      = KC_F7,
 };
 
-static tap escape_state = {
-    .is_press_action = true,
-    .state           = 0
-};
+static tap escape_state = {.is_press_action = true, .state = 0};
 
 void escape_finished(qk_tap_dance_state_t *state, void *user_data) {
     escape_state.state = current_dance(state);

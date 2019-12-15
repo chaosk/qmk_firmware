@@ -35,14 +35,14 @@ int current_dance(qk_tap_dance_state_t *state) {
         if (state->interrupted || !state->pressed) {
             current_state = SINGLE_TAP;
         } else {
-            current_state = SINGLE_HOLD; //key has not been interrupted, but they key is still held. Means you want to send a 'HOLD'.
+            current_state = SINGLE_HOLD;  // key has not been interrupted, but they key is still held. Means you want to send a 'HOLD'.
         }
     } else if (state->count == 2) {
         /*
          * DOUBLE_SINGLE_TAP is to distinguish between typing "pepper", and actually wanting a double tap
          * action when hitting 'pp'. Suggested use case for this return value is when you want to send two
          * keystrokes of the key, and not the 'double tap' action/macro.
-        */
+         */
         if (state->interrupted) {
             current_state = DOUBLE_SINGLE_TAP;
         } else if (state->pressed) {
