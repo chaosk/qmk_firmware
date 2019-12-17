@@ -1,6 +1,8 @@
 #include QMK_KEYBOARD_H
 #include "version.h"
+#include "aliases.h"
 #include "custom_keycodes.h"
+#include "ergodox_led.h"
 #include "tap_hold_expire.h"
 #include "tap_dance.h"
 #include "dances/escape.c"
@@ -24,25 +26,6 @@
     XXXXXXX,XXXXXXX, \
     XXXXXXX \
 )
-
-enum {
-    ACTIVATE_GLYPH     = KC_J,
-    ACTIVATE_SCAN      = KC_P,
-    LEARN_ABILITY      = KC_O,
-    UPGRADE_TALENTS    = KC_U,
-    SELECT_COURIER     = KC_F2,
-    DELIVER_ITEMS      = KC_F3,
-    OPEN_SHOP          = KC_F4,
-    PURCHASE_QUICKBUY  = KC_F5,
-    PURCHASE_STICKY    = KC_F6,
-    PUSH_TO_TALK       = KC_F13,
-    TAKE_STASH_ITEMS   = KC_F14,
-    PHRASE_WP = KC_F15,
-    COURIER_BURST      = KC_F16,
-    COURIER_SHIELD     = KC_F17,
-    TP_SCROLL = KC_F18,
-    ITEM_2             = KC_F19,
-};
 
 enum {
     TH_C_ITEMS,  // Courier item management
@@ -170,7 +153,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
-// Runs just one time when the keyboard initializes.
 void matrix_init_user(void) {
     // Swap hands, so that our left-hand master actually uses left side of the layout.
     swap_hands = true;
@@ -178,52 +160,13 @@ void matrix_init_user(void) {
 
 void matrix_scan_user(void) { matrix_scan_tap_hold_expire(); }
 
-// Runs whenever there is a layer state change.
 layer_state_t layer_state_set_user(layer_state_t state) {
-    ergodox_board_led_off();
-    ergodox_right_led_1_off();
-    ergodox_right_led_2_off();
-    ergodox_right_led_3_off();
-
-    uint8_t layer = get_highest_layer(state);
-    switch (layer) {
-        case 0:
-            break;
-        case 1:
-            ergodox_right_led_1_on();
-            break;
-        case 2:
-            ergodox_right_led_2_on();
-            break;
-        case 3:
-            ergodox_right_led_3_on();
-            break;
-        case 4:
-            ergodox_right_led_1_on();
-            ergodox_right_led_2_on();
-            break;
-        case 5:
-            ergodox_right_led_1_on();
-            ergodox_right_led_3_on();
-            break;
-        case 6:
-            ergodox_right_led_2_on();
-            ergodox_right_led_3_on();
-            break;
-        case 7:
-            ergodox_right_led_1_on();
-            ergodox_right_led_2_on();
-            ergodox_right_led_3_on();
-            break;
-        default:
-            break;
-    }
-
+    ergodox_led_layer_state(state);
     return state;
 };
 
 qk_tap_dance_action_t tap_dance_actions[] = {
-    [TD_ESCAPE]       = ACTION_TAP_DANCE_FN_ADVANCED(NULL, escape_finished, escape_reset),
+    [TD_ESCAPE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, escape_finished, escape_reset),
     [TD_MODALS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, modals_finished, modals_reset),
 };
 
