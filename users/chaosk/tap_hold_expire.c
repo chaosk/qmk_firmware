@@ -7,25 +7,16 @@
 #include "tap_hold_expire.h"
 #include "custom_keycodes.h"
 
-bool     tap_hold_active = false;
-uint16_t tap_hold_hold_code;
-uint16_t tap_hold_timer = 0;
+static int8_t tap_hold_highest_action = -1;
 
-void process_tap_hold_expire_action(uint16_t tap_keycode, uint16_t hold_keycode, bool pressed) {
+void process_tap_hold_expire_action(tap_hold_expire_action_t *action, bool pressed) {
     if (pressed) {
-        tap_hold_timer = timer_read();
-        if (tap_hold_hold_code != hold_keycode) {
-            tap_hold_hold_code = hold_keycode;
-            tap_hold_active    = true;
-        }
+        action->state.timer = timer_read();
     } else {
-        if (timer_elapsed(tap_hold_timer) < TAPPING_TERM) {
-            tap_code16(tap_keycode);
-        } else if (tap_hold_active) {
-            tap_code16(hold_keycode);
+        if (timer_elapsed(action->state.timer) < TAPPING_TERM) {
+            tap_code16(action->tap_keycode);
         }
-        tap_hold_hold_code = 0;
-        tap_hold_active    = false;
+        action->state.timer = 0;
     }
 };
 
@@ -35,18 +26,22 @@ bool process_tap_hold_expire(uint16_t keycode, keyrecord_t *record) {
 
     switch (keycode) {
         case QK_TAP_HOLD_EXPIRE ... QK_TAP_HOLD_EXPIRE_MAX:
+            if ((int16_t)idx > tap_hold_highest_action) tap_hold_highest_action = idx;
             action = &tap_hold_expire_actions[idx];
-            process_tap_hold_expire_action(action->tap_keycode, action->hold_keycode, record->event.pressed);
+            process_tap_hold_expire_action(action, record->event.pressed);
             return false;
     };
     return true;
 };
 
 void matrix_scan_tap_hold_expire(void) {
-    if (tap_hold_active) {
-        if (timer_elapsed(tap_hold_timer) > TAPPING_TERM && tap_hold_hold_code) {
-            tap_code16(tap_hold_hold_code);
-            tap_hold_active = false;
+    tap_hold_expire_action_t *action;
+
+    for (int i = 0; i <= tap_hold_highest_action; i++) {
+        action = &tap_hold_expire_actions[i];
+        if (action->state.timer && timer_elapsed(action->state.timer) >= TAPPING_TERM) {
+            tap_code16(action->hold_keycode);
+            action->state.timer = 0;
         }
     }
 };
