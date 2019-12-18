@@ -52,7 +52,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      * |--------+------+------+------+------+------|Courie|
      * | LShift |   Z  |   X  |   C  |   V  |   B  |Abilit|
      * `--------+------+------+------+------+-------------'
-     *   |LCtrl |  '"  | Alt  |TPScro|ITEM_2|
+     *   |LCtrl |  '"  | Alt  |TPScro|ITEM_5|
      *   `----------------------------------'
      *                                        ,-------------.
      *                                        | WP!  |LvlUp |
@@ -67,7 +67,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TAB,         KC_Q,       KC_W,       KC_E,           KC_R,           KC_T,               OSL(SYMB),
         PUSH_TO_TALK,   KC_A,       KC_S,       KC_D,           KC_F,           KC_G,
         KC_LSFT,        KC_Z,       KC_X,       KC_C,           KC_V,           KC_B,               TH(TH_C_ABILITIES),
-        KC_LCTRL,       KC_QUOT,    KC_LALT,    TP_SCROLL,      ITEM_2,
+        KC_LCTRL,       KC_QUOT,    KC_LALT,    TP_SCROLL,      ITEM_5,
 
                                                                                 PHRASE_WP,          TH(TH_LEVEL_UP),
                                                                                                     ACTIVATE_SCAN,

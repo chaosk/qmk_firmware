@@ -15,5 +15,5 @@ enum {
     COURIER_BURST      = KC_F16,
     COURIER_SHIELD     = KC_F17,
     TP_SCROLL          = KC_F18,
-    ITEM_2             = KC_F19,
+    ITEM_5             = KC_F19,
 };
